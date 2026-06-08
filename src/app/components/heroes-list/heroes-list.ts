@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { HeroDetail } from "../hero-detail/hero-detail";
 import { HeroService } from '../../services/hero-service';
 import { MessageService } from '../../services/message-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-heroes-list',
-  imports: [FormsModule, HeroDetail],
+  imports: [FormsModule, HeroDetail , RouterLink],
   templateUrl: './heroes-list.html',
   styleUrl: './heroes-list.css',
 })
@@ -18,7 +19,6 @@ export class HeroesList {
   ){}
 
   heroes: IHero[] = [];
-  selectedHero?: IHero;
 
   ngOnInit(): void{
     this.getHeroes();
@@ -28,10 +28,4 @@ export class HeroesList {
     this.heroService.getHeroes()
     .subscribe(heroes => this.heroes = heroes);
   }
-
-  onSelect(hero: IHero): void{
-    this.selectedHero = hero;
-    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
-  }
-
 }
