@@ -2,10 +2,12 @@
 <ul class="heroes">
   @for(hero of heroes; track hero.id){
     <li>
-        <button type="button">
+        <button [class.selected]="hero === selectedHero" type="button" (click)="onSelect(hero)">
             <span class="badge">{{hero.id}}</span>
             <span class="name">{{hero.name}}</span>
         </button>
     </li>
   }
 </ul>
+
+<app-hero-detail [hero]="selectedHero"></app-hero-detail>
