@@ -3,6 +3,7 @@ import { IHero } from '../../models';
 import { FormsModule } from '@angular/forms';
 import { HeroDetail } from "../hero-detail/hero-detail";
 import { HeroService } from '../../services/hero-service';
+import { MessageService } from '../../services/message-service';
 
 @Component({
   selector: 'app-heroes-list',
@@ -13,6 +14,7 @@ import { HeroService } from '../../services/hero-service';
 export class HeroesList {
   constructor(
     private heroService: HeroService,
+    private messageService: MessageService,
   ){}
 
   heroes: IHero[] = [];
@@ -29,6 +31,7 @@ export class HeroesList {
 
   onSelect(hero: IHero): void{
     this.selectedHero = hero;
+    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
   }
 
 }
