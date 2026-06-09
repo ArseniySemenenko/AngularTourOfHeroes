@@ -1,5 +1,16 @@
 <h2>My Heroes</h2>
 
+<div>
+  <label for="new-hero">Hero name: </label>
+  <input type="text" id="new-hero" #heroName>
+
+  <button
+    type="button"
+    class="add-button"
+    (click)="addHero(heroName.value); heroName.value=''"
+  >Add Hero</button>
+</div>
+
 @if( heroes ){
   @if(isLoading){
     <h1>Loading heroes...</h1>

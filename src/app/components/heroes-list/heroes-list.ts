@@ -32,4 +32,14 @@ export class HeroesList {
       this.isLoading = false;
     });
   }
+
+  addHero(name: string): void{
+    name = name.trim();
+    if(!name) return;
+    this.heroService.addHero({name} as IHero)
+    .subscribe((hero) => {
+      this.heroes.push(hero);
+      this.cdr.markForCheck();
+    });
+  }
 }
