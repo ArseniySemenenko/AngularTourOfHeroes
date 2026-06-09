@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { IHero } from '../../models';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from "@angular/router";
+import { HeroSearch } from "../hero-search/hero-search";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink],
+  imports: [RouterLink, HeroSearch],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

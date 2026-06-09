@@ -42,4 +42,12 @@ export class HeroesList {
       this.cdr.markForCheck();
     });
   }
+
+  deleteHero(hero: IHero): void{
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero.id)
+    .subscribe(() => {
+      this.cdr.markForCheck();
+    });
+  }
 }

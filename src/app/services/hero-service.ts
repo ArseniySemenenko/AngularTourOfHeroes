@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IHero } from "../models";
 import { MessageService } from "./message-service";
-import { Observable } from 'rxjs';
+import { Observable , of } from 'rxjs';
 import { HttpClient , HttpHeaders } from "@angular/common/http";
 
 @Injectable({
@@ -20,12 +20,12 @@ export class HeroService{
     };
 
     getHeroes(): Observable<IHero[]>{
-        this.log("fetched heroes from hero-service.ts");
+        this.log("fetched heroes");
         return this.http.get<IHero[]>(this.heroesUrl);
     }
 
     getHero(id: number): Observable<IHero>{
-        this.log("fetched single hero from hero-service.ts");
+        this.log("fetched single hero");
         return this.http.get<IHero>(`${this.heroesUrl}/${id}`);
     }
 
@@ -35,8 +35,21 @@ export class HeroService{
     }
 
     addHero(hero: IHero): Observable<IHero>{
-        this.log(`Added hero ${hero.id}`);
+        this.log(`Added hero ${hero.name}`);
         return this.http.post<IHero>(this.heroesUrl , hero , this.httpOptions);
+    }
+
+    deleteHero(id: number): Observable<IHero>{
+        this.log(`Deleted hero ${id}`);
+        return this.http.delete<IHero>(`${this.heroesUrl}/${id}` , this.httpOptions);
+    }
+
+    searchHeroes(name: string): Observable<IHero[]>{
+        if(!name.trim()){
+            return of([]);
+        }
+        this.log(`Searching for ${name}`);
+        return this.http.get<IHero[]>(`${this.heroesUrl}/?name=${name}`);
     }
 
     private log(message: string) {
