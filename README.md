@@ -16,14 +16,20 @@ ng serve
 
 ### /Components
 /dashboard - Top 4 hero
+
 /hero-detail - Change hero name
+
 /hero-search - Seacrh hero by name
+
 /heroes-list - Display heroes
+
 /messages - Create, display "log" messages
 
 ### /Services
 hero-service.ts - Heroes functionality service
+
 message-service.ts - Message functionality service
+
 in-memory-service.ts - Http server imitation
 
 ## Dependencies
