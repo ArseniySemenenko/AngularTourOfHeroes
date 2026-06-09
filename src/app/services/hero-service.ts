@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { IHero } from "../models";
-import { HEROES } from "../mock";
 import { MessageService } from "./message-service";
-import { Observable, of , tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient , HttpHeaders } from "@angular/common/http";
 
 @Injectable({
@@ -15,6 +14,7 @@ export class HeroService{
     ){}
 
     private heroesUrl = 'api/heroes';
+
     private httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
@@ -29,22 +29,12 @@ export class HeroService{
         return this.http.get<IHero>(`${this.heroesUrl}/${id}`);
     }
 
+    updateHero(hero: IHero): Observable<any> {
+        this.log(`Updated hero ${hero.id}`);
+        return this.http.put(this.heroesUrl , hero , this.httpOptions);
+    }
+
     private log(message: string) {
         this.messageService.add(`HeroService: ${message}`);
     }
-
-
-    /*getHero(id: number): Observable<IHero> {
-        const hero = HEROES.find(h => h.id === id)!;
-        this.messageService.add(`HeroService: fetched hero id=${id}`);
-        return of(hero);
-    }
-
-    getHeroes(): Observable<IHero[]> {
-        const heroes = of(HEROES);
-        this.messageService.add('HeroService: fetched heroes');
-        return heroes;
-    }*/
-
-    
 }

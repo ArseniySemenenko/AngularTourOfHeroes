@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component , inject, Input} from '@angular/core';
+import { ChangeDetectorRef, Component , inject} from '@angular/core';
 import { IHero } from '../../models';
 import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ export class HeroDetail {
   ngOnInit(): void {
     this.getHero();
   }
+
   getHero(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.heroService.getHero(id)
@@ -31,6 +32,15 @@ export class HeroDetail {
       this.hero = hero
       this.cdr.markForCheck();
     });
+  }
+
+  updateHero(): void{
+    if(this.hero){
+      this.heroService.updateHero(this.hero)
+      .subscribe(() => {
+        this.goBack();
+      })
+    }
   }
 
   goBack(): void{
