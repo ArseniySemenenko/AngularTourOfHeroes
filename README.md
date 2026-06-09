@@ -2,58 +2,46 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.0.
 
-## Development server
+## Start Development Server
 
-To start a local development server, run:
+git clone https://github.com/ArseniySemenenko/AngularTourOfHeroes.git
 
-```bash
+cd AngularTourOfHeroes
+
+npm install
+
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Functionality
 
-## Code scaffolding
+### /Components
+/dashboard - Top 4 hero
+/hero-detail - Change hero name
+/hero-search - Seacrh hero by name
+/heroes-list - Display heroes
+/messages - Create, display "log" messages
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### /Services
+hero-service.ts - Heroes functionality service
+message-service.ts - Message functionality service
+in-memory-service.ts - Http server imitation
 
-```bash
-ng generate component component-name
-```
+## Dependencies
+"@angular/common": "^22.0.0",
+"@angular/compiler": "^22.0.0",
+"@angular/core": "^22.0.0",
+"@angular/forms": "^22.0.0",
+"@angular/platform-browser": "^22.0.0",
+"@angular/router": "^22.0.0",
+"angular-in-memory-web-api": "^0.22.0",
+"rxjs": "~7.8.0",
+"tslib": "^2.3.0"
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+/devDependencies 
+"@angular/build": "^22.0.0",
+"@angular/cli": "^22.0.0",
+"@angular/compiler-cli": "^22.0.0",
+"jsdom": "^28.0.0",
+"prettier": "^3.8.1",
+"typescript": "~6.0.2",
+"vitest": "^4.0.8"
