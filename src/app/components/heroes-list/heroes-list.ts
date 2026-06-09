@@ -1,24 +1,26 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { IHero } from '../../models';
 import { FormsModule } from '@angular/forms';
-import { HeroDetail } from "../hero-detail/hero-detail";
 import { HeroService } from '../../services/hero-service';
 import { MessageService } from '../../services/message-service';
 import { RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+
 
 @Component({
   selector: 'app-heroes-list',
-  imports: [FormsModule, HeroDetail , RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './heroes-list.html',
   styleUrl: './heroes-list.css',
 })
 export class HeroesList {
-  constructor(
-    private heroService: HeroService,
-    private messageService: MessageService,
-  ){}
+
+  private heroService = inject(HeroService);
+  private cdr = inject(ChangeDetectorRef);
 
   heroes: IHero[] = [];
+  isLoading = true;
 
   ngOnInit(): void{
     this.getHeroes();
@@ -26,6 +28,10 @@ export class HeroesList {
 
   getHeroes(): void {
     this.heroService.getHeroes()
-    .subscribe(heroes => this.heroes = heroes);
+    .subscribe((heroes) => {
+      this.heroes = heroes;
+      this.cdr.markForCheck();
+      this.isLoading = false;
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component , Input} from '@angular/core';
+import { ChangeDetectorRef, Component , inject, Input} from '@angular/core';
 import { IHero } from '../../models';
 import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,24 +13,25 @@ import { Location } from '@angular/common';
   styleUrl: './hero-detail.css',
 })
 export class HeroDetail {
-  constructor(
-    private heroService: HeroService,
-    private route: ActivatedRoute,
-    private location: Location,
-  ){}
+
+  private heroService = inject(HeroService);
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
+  private cdr = inject(ChangeDetectorRef);
 
   hero?: IHero;
 
   ngOnInit(): void {
     this.getHero();
   }
-
   getHero(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.heroService.getHero(id)
-    .subscribe(hero => this.hero = hero);
+    .subscribe((hero) => {
+      this.hero = hero
+      this.cdr.markForCheck();
+    });
   }
-
 
   goBack(): void{
     this.location.back();

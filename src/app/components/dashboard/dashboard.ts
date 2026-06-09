@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { IHero } from '../../models';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from "@angular/router";
@@ -10,11 +10,11 @@ import { RouterLink } from "@angular/router";
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  constructor(
-    private heroService: HeroService,
-  ){}
+  private heroService = inject(HeroService);
+  private cdr = inject(ChangeDetectorRef);
 
   heroes: IHero[] = [];
+  isLoading = true;
 
   ngOnInit(): void{
     this.getHeroes();
@@ -22,7 +22,11 @@ export class Dashboard {
 
   getHeroes(): void{
     this.heroService.getHeroes()
-    .subscribe(heroes => this.heroes = heroes.slice(1,5));
+    .subscribe((heroes) => {
+      this.heroes = heroes.slice(1,5);
+      this.cdr.markForCheck();
+      this.isLoading = false;
+    });
   }
   
 }
