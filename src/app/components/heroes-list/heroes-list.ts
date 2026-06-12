@@ -15,7 +15,7 @@ import { AsyncPipe } from '@angular/common';
 })
 export class HeroesList {
   private heroService = inject(HeroService);
-
+  
   heroes$ = new BehaviorSubject<IHero[]>([]);
 
   ngOnInit(): void {
@@ -31,13 +31,6 @@ export class HeroesList {
   }
 
   addHero(name: string): void {
-    /*name = name.trim();
-    if (!name) return;
-    this.heroService.addHero({ name } as IHero).subscribe((hero) => {
-      this.heroes.push(hero);
-      this.cdr.markForCheck();
-    });*/
-    
     name = name.trim();
     if(!name) return;
     this.heroService.addHero({name} as IHero).subscribe({
@@ -48,11 +41,6 @@ export class HeroesList {
   }
 
   deleteHero(hero: IHero): void {
-    /*this.heroes = this.heroes.filter((h) => h !== hero);
-    this.heroService.deleteHero(hero.id).subscribe(() => {
-      this.cdr.markForCheck();
-    });*/
-    
     this.heroService.deleteHero(hero.id).subscribe({
       next: () => {
         this.getHeroes();

@@ -5,7 +5,7 @@ import { AsyncPipe } from '@angular/common';
 import { HeroService } from '../../services/hero-service';
 import { IHero } from '../../models';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { debounceTime , distinctUntilChanged , switchMap , Subject} from 'rxjs';
 
 @Component({
