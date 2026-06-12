@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
-import { Observable, Subject, switchMap, startWith} from 'rxjs';
+import { BehaviorSubject} from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -15,15 +15,19 @@ import { AsyncPipe } from '@angular/common';
 })
 export class HeroesList {
   private heroService = inject(HeroService);
-  private updateTrigger$ = new Subject<void>();
 
-  heroes$: Observable<IHero[]> = this.updateTrigger$.pipe(
-    startWith(void 0),
-    switchMap(() => this.heroService.getHeroes())
-  )
+  heroes$ = new BehaviorSubject<IHero[]>([]);
 
   ngOnInit(): void {
-    this.updateTrigger$.next();
+    this.getHeroes();
+  }
+
+  getHeroes(): void{
+    this.heroService.getHeroes().subscribe({
+      next: (heroes) => {
+        this.heroes$.next(heroes)
+      }
+    })
   }
 
   addHero(name: string): void {
@@ -33,11 +37,12 @@ export class HeroesList {
       this.heroes.push(hero);
       this.cdr.markForCheck();
     });*/
+    
     name = name.trim();
     if(!name) return;
     this.heroService.addHero({name} as IHero).subscribe({
       next: () => {
-        this.updateTrigger$.next();
+        this.getHeroes();
       }
     });
   }
@@ -47,9 +52,10 @@ export class HeroesList {
     this.heroService.deleteHero(hero.id).subscribe(() => {
       this.cdr.markForCheck();
     });*/
+    
     this.heroService.deleteHero(hero.id).subscribe({
       next: () => {
-        this.updateTrigger$.next();
+        this.getHeroes();
       }
     })
   }

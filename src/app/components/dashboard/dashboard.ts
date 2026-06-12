@@ -3,7 +3,7 @@ import { IHero } from '../../models';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from "@angular/router";
 import { HeroSearch } from "../hero-search/hero-search";
-import { Observable, Subject, switchMap , map, startWith } from 'rxjs';
+import { map, BehaviorSubject } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -14,15 +14,16 @@ import { AsyncPipe } from '@angular/common';
 })
 export class Dashboard {
   private heroService = inject(HeroService);
-  private updateTrigger$ = new Subject<void>();
 
-  heroes$: Observable<IHero[]> = this.updateTrigger$.pipe(
-    startWith(void 0),
-    switchMap(() => this.heroService.getHeroes()),
-    map(arr => arr.slice(1,5))
-  )
+  heroes$ = new BehaviorSubject<IHero[]>([]);
 
   ngOnInit(): void{
-    this.updateTrigger$.next();
+    this.heroService.getHeroes()
+    .pipe(
+      map(heroes => heroes.slice(1,5))
+    )
+    .subscribe((heroes) => {
+      this.heroes$.next(heroes);
+    })
   }
 }

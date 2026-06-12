@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HeroService } from '../../services/hero-service';
 import { Location } from '@angular/common';
-import { Observable, startWith, Subject, switchMap , map} from 'rxjs';
+import { BehaviorSubject} from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -19,9 +19,8 @@ export class HeroDetail {
   private heroService = inject(HeroService);
   private route = inject(ActivatedRoute);
   private location = inject(Location);
-  private updateTrigger$ = new Subject<void>();
 
-  hero$!: Observable<IHero>;
+  hero$ = new BehaviorSubject<IHero>({} as IHero);
 
   ngOnInit(): void {
     this.getHero();
@@ -29,26 +28,18 @@ export class HeroDetail {
 
   getHero(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    /*this.heroService.getHero(id)
+
+    this.heroService.getHero(id)
     .subscribe((hero) => {
-      this.hero = hero
-      this.cdr.markForCheck();
-    });*/
-
-    this.hero$ = this.updateTrigger$.pipe(
-      startWith(void 0),
-      switchMap(() => this.heroService.getHero(id)),
-    )
-
-    console.log(this.hero$)
+      this.hero$.next(hero);
+    })
   }
 
   updateHero(hero: IHero): void{
     if(hero){
-      this.heroService.updateHero(hero).subscribe({
-        next: () => {
-          this.goBack()
-        }
+      this.heroService.updateHero(hero)
+      .subscribe(() => {
+        this.goBack();
       })
     }
   }
