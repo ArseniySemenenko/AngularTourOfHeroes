@@ -5,8 +5,8 @@ import { AsyncPipe } from '@angular/common';
 import { HeroService } from '../../services/hero-service';
 import { IHero } from '../../models';
 
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime , distinctUntilChanged , switchMap } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { debounceTime , distinctUntilChanged , switchMap , Subject} from 'rxjs';
 
 @Component({
   selector: 'app-hero-search',
@@ -16,17 +16,20 @@ import { debounceTime , distinctUntilChanged , switchMap } from 'rxjs';
 })
 export class HeroSearch {
   private heroService = inject(HeroService);
+  private searchTerm$ = new Subject<string>();
 
-  heroes$ = new BehaviorSubject<IHero[]>([]);
+  heroes$!: Observable<IHero[]>;
 
-  searchHero(name: string): void{
-    this.heroService.searchHeroes(name).pipe(
+  ngOnInit(): void{
+    this.heroes$ = this.searchTerm$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
+      switchMap((name: string) => this.heroService.searchHeroes(name))
     )
-    .subscribe((heroes)=>{
-      this.heroes$.next(heroes);
-    })
+  }
+
+  searchHero(name: string): void{
+    this.searchTerm$.next(name);
   }
   
 }
