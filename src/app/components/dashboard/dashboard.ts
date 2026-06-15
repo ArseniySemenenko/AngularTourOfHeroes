@@ -15,15 +15,8 @@ import { AsyncPipe } from '@angular/common';
 export class Dashboard {
   private heroService = inject(HeroService);
 
-  heroes$ = new BehaviorSubject<IHero[]>([]);
-
-  ngOnInit(): void{
-    this.heroService.getHeroes()
+  heroes$ = this.heroService.getHeroes()
     .pipe(
       map(heroes => heroes.slice(1,5))
     )
-    .subscribe((heroes) => {
-      this.heroes$.next(heroes);
-    })
-  }
 }
