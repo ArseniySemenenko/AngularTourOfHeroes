@@ -3,19 +3,27 @@ import { HeroService } from '../../services/hero-service';
 import { RouterLink } from "@angular/router";
 import { HeroSearch } from "../hero-search/hero-search";
 import { map } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { signal } from '@angular/core';
+import { IHero } from '../../models';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, HeroSearch , AsyncPipe],
+  imports: [RouterLink, HeroSearch],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
   private heroService = inject(HeroService);
 
-  heroes$ = this.heroService.getHeroes()
-    .pipe(
-      map(heroes => heroes.slice(1,5))
-    )
+  heroes = signal<IHero[]>([]);
+ 
+  ngOnInit() {
+    this.heroService.getHeroes()
+      .pipe(
+        map(heroes => heroes.slice(1, 5))
+      )
+      .subscribe(
+        heroes => this.heroes.set(heroes)
+      )
+  }
 }
