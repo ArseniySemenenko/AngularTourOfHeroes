@@ -1,17 +1,15 @@
-import { Component , DestroyRef, inject} from '@angular/core';
+import { Component , DestroyRef, inject, signal} from '@angular/core';
 import { IHero } from '../../models';
 import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HeroService } from '../../services/hero-service';
 import { Location } from '@angular/common';
-import { BehaviorSubject} from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-hero-detail',
-  imports: [UpperCasePipe , FormsModule , AsyncPipe],
+  imports: [UpperCasePipe , FormsModule],
   templateUrl: './hero-detail.html',
   styleUrl: './hero-detail.css',
 })
@@ -22,7 +20,7 @@ export class HeroDetail {
   private location = inject(Location);
   private destroyRef = inject(DestroyRef);
 
-  hero$ = new BehaviorSubject<IHero>({} as IHero);
+  hero = signal<IHero>({} as IHero);
 
   ngOnInit(): void {
     this.getHero();
@@ -34,7 +32,7 @@ export class HeroDetail {
     this.heroService.getHero(id)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe((hero) => {
-      this.hero$.next(hero);
+      this.hero.set(hero)
     })
   }
 
