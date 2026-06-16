@@ -11,9 +11,9 @@
   >Add Hero</button>
 </div>
 
-@if( heroes$ ){
+@if( heroes() ){
   <ul class="heroes">
-    @for (hero of heroes$ | async; track hero.id){
+    @for (hero of heroes(); track hero.id){
       <li>
         <a routerLink="/detail/{{hero.id}}">
           <span class="badge">{{hero.id}}</span> {{hero.name}}

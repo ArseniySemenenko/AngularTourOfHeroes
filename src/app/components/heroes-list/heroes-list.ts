@@ -1,4 +1,4 @@
-import { Component, DestroyRef } from '@angular/core';
+import { Component, DestroyRef, signal } from '@angular/core';
 import { IHero } from '../../models';
 import { FormsModule } from '@angular/forms';
 import { HeroService } from '../../services/hero-service';
@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-heroes-list',
-  imports: [FormsModule, RouterLink, AsyncPipe],
+  imports: [FormsModule, RouterLink],
   templateUrl: './heroes-list.html',
   styleUrl: './heroes-list.css',
 })
@@ -19,7 +19,7 @@ export class HeroesList {
   private heroService = inject(HeroService);
   private destroyRef = inject(DestroyRef);
   
-  heroes$ = new BehaviorSubject<IHero[]>([]);
+  heroes = signal<IHero[]>([]);
 
   ngOnInit(): void {
     this.getHeroes();
@@ -30,7 +30,7 @@ export class HeroesList {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (heroes) => {
-          this.heroes$.next(heroes)
+          this.heroes.set(heroes);
         }
       })
   }
@@ -42,10 +42,9 @@ export class HeroesList {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (newHero) => {
-          const current$ = this.heroes$.value;
-          this.heroes$.next([...current$, newHero]);
+          this.heroes.update(heroes => [...heroes, newHero]);
         }
-      });
+    });
   }
 
   deleteHero(hero: IHero): void {
@@ -53,8 +52,7 @@ export class HeroesList {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          const current$ = this.heroes$;
-          this.heroes$.next(current$.value.filter(h => h.id != hero.id));
+          this.heroes.update(heroes => heroes.filter(h => h.id != hero.id));
         }
       })
   }
