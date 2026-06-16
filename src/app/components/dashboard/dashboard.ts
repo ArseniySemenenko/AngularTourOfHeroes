@@ -1,9 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { IHero } from '../../models';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from "@angular/router";
 import { HeroSearch } from "../hero-search/hero-search";
-import { map, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
