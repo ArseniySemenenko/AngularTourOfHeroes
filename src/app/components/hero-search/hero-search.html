@@ -4,11 +4,11 @@
         type="text"
         #searchBox
         id="search-box"
-        (input)="searchHero(searchBox.value)"
+        (input)="searchTerm.set(searchBox.value)"
     >
 
     <ul class="search-result">
-        @for(hero of heroes$ | async; track hero.id){
+        @for(hero of heroes(); track hero.id){
             <li>
                 <a routerLink="/detail/{{hero.id}}">
                     {{hero.name}}

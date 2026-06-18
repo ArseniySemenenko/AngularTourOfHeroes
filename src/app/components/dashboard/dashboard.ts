@@ -5,6 +5,7 @@ import { HeroSearch } from "../hero-search/hero-search";
 import { map } from 'rxjs';
 import { signal } from '@angular/core';
 import { IHero } from '../../models';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-dashboard',

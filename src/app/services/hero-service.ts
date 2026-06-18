@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IHero } from "../models";
 import { MessageService } from "./message-service";
-import { catchError, Observable , of } from 'rxjs';
+import { catchError, debounceTime, Observable , of } from 'rxjs';
 import { HttpClient , HttpHeaders } from "@angular/common/http";
 
 @Injectable({
@@ -60,7 +60,7 @@ export class HeroService{
         }
         this.log(`Searching for ${name}`);
         return this.http.get<IHero[]>(`${this.heroesUrl}/?name=${name}`).pipe(
-            catchError(this.handleError<IHero[]>(`search by ${name}` , []))
+          catchError(this.handleError<IHero[]>(`search by ${name}`, [])),
         );
     }
 

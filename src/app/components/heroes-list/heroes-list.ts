@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
-import { BehaviorSubject} from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
