@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from "@angular/router";
 import { HeroSearch } from "../hero-search/hero-search";
@@ -15,12 +15,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class Dashboard {
   private heroService = inject(HeroService);
+  private destroyRef = inject(DestroyRef);
 
   heroes = signal<IHero[]>([]);
  
   ngOnInit() {
     this.heroService.getHeroes()
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         map(heroes => heroes.slice(1, 5))
       )
       .subscribe(
