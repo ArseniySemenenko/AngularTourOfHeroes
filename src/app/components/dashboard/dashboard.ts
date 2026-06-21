@@ -14,8 +14,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  private heroService = inject(HeroService);
-  private destroyRef = inject(DestroyRef);
+  private readonly heroService = inject(HeroService);
+  private readonly destroyRef = inject(DestroyRef);
 
   heroes = signal<IHero[]>([]);
  

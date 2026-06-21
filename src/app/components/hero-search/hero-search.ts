@@ -12,8 +12,8 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
   styleUrl: './hero-search.css',
 })
 export class HeroSearch {
-  private heroService = inject(HeroService);
-  private destroyRef = inject(DestroyRef);
+  private readonly heroService = inject(HeroService);
+  private readonly destroyRef = inject(DestroyRef);
   searchTerm = signal<string>("");
 
   heroes = toSignal(

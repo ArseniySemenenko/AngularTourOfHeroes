@@ -1,4 +1,4 @@
-import { Component, DestroyRef, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { IHero } from '../../models';
 import { FormsModule } from '@angular/forms';
 import { HeroService } from '../../services/hero-service';
@@ -13,9 +13,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './heroes-list.html',
   styleUrl: './heroes-list.css',
 })
-export class HeroesList {
-  private heroService = inject(HeroService);
-  private destroyRef = inject(DestroyRef);
+export class HeroesList implements OnInit{
+  private readonly heroService = inject(HeroService);
+  private readonly destroyRef = inject(DestroyRef);
   
   heroes = signal<IHero[]>([]);
 
@@ -23,7 +23,7 @@ export class HeroesList {
     this.getHeroes();
   }
 
-  getHeroes(): void {
+  private getHeroes(): void {
     this.heroService.getHeroes()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
