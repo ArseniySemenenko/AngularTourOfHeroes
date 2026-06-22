@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 
 @Injectable({
     providedIn: 'root',
 })
 export class MessageService {
-    messages: string[] = [];
+  messages = signal<string[]>([]);
+  
+  add(message: string) {
+    this.messages.update(messages => [...messages, message]);
+  }
 
-    add(message: string) {
-        this.messages.push(message);
-    }
-
-    clear() {
-        this.messages = [];
-    }
+  clear() {
+    this.messages.set([]);
+  }
 }

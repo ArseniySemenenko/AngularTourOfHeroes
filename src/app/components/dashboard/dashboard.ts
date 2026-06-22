@@ -1,11 +1,10 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { HeroService } from '../../services/hero-service';
 import { RouterLink } from "@angular/router";
 import { HeroSearch } from "../hero-search/hero-search";
 import { map } from 'rxjs';
 import { signal } from '@angular/core';
 import { IHero } from '../../models';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,17 +12,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
-  private heroService = inject(HeroService);
-  private destroyRef = inject(DestroyRef);
+export class Dashboard implements OnInit{
+  private readonly heroService = inject(HeroService);
 
   heroes = signal<IHero[]>([]);
  
   ngOnInit() {
     this.heroService.getHeroes()
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map(heroes => heroes.slice(1, 5))
+        map(heroes => heroes.slice(0 , 4))
       )
       .subscribe(
         heroes => this.heroes.set(heroes)

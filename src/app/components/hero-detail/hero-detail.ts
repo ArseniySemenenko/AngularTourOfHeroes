@@ -1,49 +1,56 @@
-import { Component , DestroyRef, inject, signal} from '@angular/core';
+import { Component , DestroyRef, inject, OnInit, signal} from '@angular/core';
 import { IHero } from '../../models';
 import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HeroService } from '../../services/hero-service';
 import { Location } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-hero-detail',
-  imports: [UpperCasePipe , FormsModule],
+  imports: [UpperCasePipe, FormsModule],
   templateUrl: './hero-detail.html',
   styleUrl: './hero-detail.css',
 })
-export class HeroDetail {
+export class HeroDetail implements OnInit{
 
-  private heroService = inject(HeroService);
-  private route = inject(ActivatedRoute);
-  private location = inject(Location);
-  private destroyRef = inject(DestroyRef);
+  private readonly heroService = inject(HeroService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly location = inject(Location);
 
-  hero = signal<IHero>({} as IHero);
-
+  hero = signal<IHero>({ id: 0, name: ""});
+  notFound = signal(false);
+  notFoundId = signal("");
+  
   ngOnInit(): void {
     this.getHero();
   }
 
-  getHero(): void {
+  private getHero(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-
-    this.heroService.getHero(id)
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe((hero) => {
-      this.hero.set(hero)
-    })
+    if (!isNaN(id)) {
+      this.heroService.getHero(id)
+          .subscribe((hero) => {
+            if (hero) {
+              this.hero.set(hero);
+            }
+            else {
+              this.notFoundId.set(String(this.route.snapshot.paramMap.get('id')));
+              this.notFound.set(true);
+            }
+          })
+    }
+    else {
+      this.notFoundId.set(String(this.route.snapshot.paramMap.get('id')));
+      this.notFound.set(true);
+    }
   }
 
   updateHero(hero: IHero): void{
-    if(hero){
-      this.heroService.updateHero(hero)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.heroService.updateHero(hero)
       .subscribe(() => {
         this.goBack();
-      })
-    }
+      });
   }
 
   goBack(): void{

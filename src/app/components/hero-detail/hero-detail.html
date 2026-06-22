@@ -1,4 +1,4 @@
-@if( hero() ){
+@if( !notFound() ){
     <div>
         <h2>{{hero().name | uppercase}} Details</h2>
         <div><span>id: </span>{{hero().id}}</div>
@@ -7,6 +7,10 @@
             <input id="hero-name" [(ngModel)]="hero().name" placeholder="name">
         </div>
     </div>
+}
+@else{
+    <h2>Hero With Id {{notFoundId()}} Not Found</h2>
+}
     <button
         (click)="goBack()"
     >Go Back</button>
@@ -14,4 +18,3 @@
     <button
         (click)="updateHero(hero())"
     >Save</button>
-}
